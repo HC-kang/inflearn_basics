@@ -1,12 +1,13 @@
-from morning_car import MorningCar
-from porsche_car import PorscheCar
+from car import Car
 
 class User:
-    def __init__(self, car_name) -> None:
-        if car_name == 'morning':
-            self.car = MorningCar()
-        elif car_name == 'porsche':
-            self.car = PorscheCar()
+    def __init__(self, car: Car) -> None:
+        self.car = car
     
     def drive(self) -> None:
+        print('User: driving start')
         self.car.accelerate()
+    
+    def stop(self) -> None:
+        print('User: Stop')
+        self.car.decelerate()
