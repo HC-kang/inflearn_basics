@@ -111,6 +111,8 @@ class User:
             self.store.take_money(product['price']) # 상점 금액 수령
             self.belongs.append(product)
             return product
+        else:
+            raise Exception('잔돈이 부족합니다.')
     
 
 if __name__ == '__main__':

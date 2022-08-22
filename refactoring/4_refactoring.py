@@ -9,6 +9,10 @@
 # 2. User의 결제 로직을 수정한다.
 # 3. User도 캡슐화 하자.
 
+# 3번. User가 지나치게 많은 행위를 책임지고 있음. Store가 판매에 대한 책임을 가져가야 함.add()
+# 개선점
+# 1. 상점에서 상품을 판매하는 행위를 추상화하고, 구체적인 로직을 해당 메서드로 옮긴다.
+
 from abc import ABC, abstractmethod
 
 
@@ -24,11 +28,7 @@ class Store(ABC):
         pass
     
     @abstractmethod
-    def give_product(self, product_id):
-        pass
-    
-    @abstractmethod
-    def take_money(self, money):
+    def sell_product(self, product_id, money):
         pass
     
 
@@ -51,11 +51,29 @@ class GrabStore(Store):
     def show_product(self, product_id):
         return self._products[product_id]
 
-    def give_product(self, product_id):
-        self._products.pop(product_id)
+    def sell_product(self, product_id, money):
+        # Validation 최소화
+        product = self.show_product(product_id=product_id)
+        if not product:
+            raise Exception('상품이 존재하지 않습니다.')
+        
+        self._take_money(money)
+        try:
+            sell_product = self._take_out_product(product_id)
+            return sell_product
+        except Exception as e:
+            self._return_money(money)
+            raise e
+            
+    def _take_out_product(self, product_id):
+        return self._products.pop(product_id)
     
-    def take_money(self, money):
+    def _take_money(self, money):
         self._money += money
+        
+    def _return_money(self, money):
+        self._money -= money
+        
     
     
 class FruitStore(Store):
@@ -76,22 +94,39 @@ class FruitStore(Store):
     
     def show_product(self, product_id):
         return self._products[product_id]
-
-    def give_product(self, product_id):
-        self._products.pop(product_id)
     
-    def take_money(self, money):
+    def sell_product(self, product_id, money):
+        product = self.show_product(product_id=product_id)
+        if not product:
+            raise Exception('상품 존재x')
+
+        self._take_money(money)
+        try:
+            sell_product = self._take_out_product(product_id=product_id)
+            return sell_product
+        except Exception as e:
+            self._return_money(money)
+            raise e
+
+    def _take_out_product(self, product_id):
+        return self._products.pop(product_id)
+    
+    def _take_money(self, money):
         self._money += money
+    
+    def _return_money(self, money):
+        self._money -= money
+        
 
 
 class User:
     def __init__(self, money, store: Store):
-        self.money = money
+        self._money = money
         self.store = store
         self.belongs = []
     
     def get_money(self):
-        return self.money
+        return self._money
     
     def get_belongs(self):
         return self.belongs
@@ -105,12 +140,28 @@ class User:
     
     def purchase_product(self, product_id):
         product = self.see_product(product_id=product_id)
-        if self.money >= product['price']:
-            self.store.give_product(product_id=product_id) # 상점에서 상품 꺼내기
-            self.money -= product['price'] # 사용자 금액 지불
-            self.store.take_money(product['price']) # 상점 금액 수령
-            self.belongs.append(product)
-            return product
+        price = product['price']
+        if self._money >= price:
+            self._give_money(money=price)
+            try:
+                my_product = self.store.sell_product(product_id=product_id, money=price)
+                self._add_belong(my_product)
+            except Exception as e:
+                self._take_money(money=price)
+                print(f'구매 중 문제가 발생했습니다. {str(e)}')
+                
+        else:
+            raise Exception('잔돈이 부족합니다.')
+    
+    def _give_money(self, money):
+        self._money -= money
+    
+    def _take_money(self, money):
+        self._money += money
+        
+    def _add_belong(self, product):
+        self.belongs.append(product)
+        
     
 
 if __name__ == '__main__':
