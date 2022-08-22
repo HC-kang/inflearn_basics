@@ -1,9 +1,10 @@
 class MorningCar:
     def __init__(self) -> None:
-        pass
+        self.speed = 0
+        self._fuel = 0
     
     def accelerate(self) -> None:
-        pass
+        self.speed += 1
     
     def decelerate(self) -> None:
-        pass
+        self.speed -= 1
