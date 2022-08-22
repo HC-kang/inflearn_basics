@@ -1,4 +1,36 @@
-class GrabStore:
+# 1번. 다른 Store 추가 시?
+# 개선점
+# 1. store를 추상화
+# 2. 의존성을 주입
+
+from abc import ABC, abstractmethod
+
+
+class Store(ABC):
+    @abstractmethod
+    def __init__(self):
+        self.money = 0
+        self.name = ''
+        self.products = {}
+        
+    @abstractmethod
+    def set_money(self, money):
+        pass
+    
+    @abstractmethod
+    def set_products(self, products):
+        pass
+    
+    @abstractmethod
+    def get_money(self):
+        pass
+    
+    @abstractmethod
+    def get_products(self):
+        pass
+    
+
+class GrabStore(Store):
     def __init__(self):
         self.money = 0
         self.name = '그랩마켓'
@@ -18,12 +50,34 @@ class GrabStore:
 
     def get_products(self):
         return self.products
+    
+    
+class FruitStore(Store):
+    def __init__(self):
+        self.money = 0
+        self.name = '과일마켓'
+        self.products = {
+            1: {'name': '바나나', 'price': 3_000},
+            2: {'name': '사과', 'price': 5_000},
+        }
+    
+    def set_money(self, money):
+        self.money = money
+    
+    def set_products(self, products):
+        self.products = products
+    
+    def get_money(self):
+        return self.money
+
+    def get_products(self):
+        return self.products
 
 
 class User:
-    def __init__(self):
+    def __init__(self, store: Store):
         self.money = 0
-        self.store = GrabStore()
+        self.store = store
         self.belongs = []
     
     def set_money(self, money):
@@ -56,7 +110,6 @@ class User:
     
 
 if __name__ == '__main__':
-    user = User()
-    user.set_money(100_000)
-    user.purchase_product(product_id=1)
+    user_a = User(store = GrabStore())
+    user_b = User(store = FruitStore())
     
