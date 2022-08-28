@@ -2,6 +2,8 @@ import pytest
 from GrabRealStore import GrabRealStore
 from main import GrabStore, Product, User
 
+API_URL = "https://fakestoreapi.com/products"
+
 @pytest.fixture(scope="function")
 def mock_products():
     return {
