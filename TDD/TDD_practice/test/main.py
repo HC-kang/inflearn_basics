@@ -163,7 +163,8 @@ class User:
             except Exception as e:
                 self._take_money(money=price)
                 print(f'구매 중 문제가 발생했습니다. {str(e)}')
-                
+            return product   
+        
         else:
             raise Exception('잔돈이 부족합니다.')
     
