@@ -63,7 +63,7 @@ class GrabStore(Store):
         self._products = products
     
     def show_product(self, product_id):
-        return self._products[product_id]
+        return self._products.get(product_id, None)
 
     def sell_product(self, product_id, money):
         # Validation 최소화
