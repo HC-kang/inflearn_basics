@@ -32,7 +32,7 @@ def test_give_money_expensive(user):
 
 # Integration Test
 
-def test_purchase_product_well(user):
+def test_purchase_product_well(mock_api, user):
     # 1. 유저가 돈을 잘 냈는가?
     # 2. 유저의 주머니에 상품이 잘 들어갔는가?
     product_id = 1
@@ -45,7 +45,7 @@ def test_purchase_product_well(user):
     assert user.get_belongs() == [product]
 
 
-def test_purchase_product_expensive(user):
+def test_purchase_product_expensive(mock_api, user):
     product_id = 2
     
     with pytest.raises(Exception):
