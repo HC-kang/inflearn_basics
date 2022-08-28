@@ -1,17 +1,24 @@
 from main import Product
 import pytest
+from unittest import mock
 
 # Unit Test
 
-def test_show_product(grab_store):
+def test_show_product(grab_store, mock_products):
     # given
     product_id = 1
+    mock_product = mock_products[product_id]
     
     # when
-    product = grab_store.show_product(product_id=product_id)
+    with mock.patch("requests.get") as mock_api:
+        res = mock_api.return_value
+        res.status_code = 200
+        res.json.return_value = mock_products[product_id]
+        
+        product = grab_store.show_product(product_id=product_id)
     
     # then
-    assert product == Product(name="키보드", price=30000)
+    assert product == Product(name=mock_product['title'], price=mock_product['price'])
 
 
 def test_take_money(grab_store):
