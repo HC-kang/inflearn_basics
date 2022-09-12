@@ -3,7 +3,7 @@ def create_token(user_id: str) -> str:
 
 
 def test_create_token():
-    actual = create_token('grab')
+    actual = create_token("grab")
     expected = "grab_verified"
-    
+
     assert actual == expected

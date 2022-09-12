@@ -1,19 +1,19 @@
 class Developer:
-    name = 'dev'
-    
+    name = "dev"
+
     def develop(self):
         self.drink_coffee()
         self.turn_on_computer()
         self.open_ide()
-    
+
     def drink_coffee(self):
-        print('drink coffee')
-        
+        print("drink coffee")
+
     def turn_on_computer(self):
-        print('turn on computer')
-        
+        print("turn on computer")
+
     def open_ide(self):
-        print('open_ide')
+        print("open_ide")
 
 
 class Company:

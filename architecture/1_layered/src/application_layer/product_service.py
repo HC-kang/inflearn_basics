@@ -8,6 +8,7 @@ from src.domain_layer.product import Product
 from src.infrastructure_layer.database import db
 from src.infrastructure_layer.repositories.product_repository import ProductRepository
 
+
 def create_product(name: str, price: str) -> bool:
     try:
         product = Product(name, price)

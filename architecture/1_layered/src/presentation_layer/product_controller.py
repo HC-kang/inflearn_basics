@@ -6,11 +6,10 @@
 from fastapi import FastAPI
 from src.presentation_layer.web import app
 from src.application_layer import product_service
-        
+
+
 @app.post("/products", status_code=200)
 def register_products(json_req) -> None:
     product = product_service.create_product(name=json_req.name, price=json_req.price)
-    response = {
-        "product": product
-    }
+    response = {"product": product}
     return response
