@@ -1,5 +1,5 @@
 from app.domain.entity import User
-from app.application.interface.user_repository import AbstractRepository
+from app.application.interface.repository import AbstractRepository
 
 
 class UserService:
