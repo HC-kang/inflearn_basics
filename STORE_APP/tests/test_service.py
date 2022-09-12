@@ -7,7 +7,7 @@ from fakes import FakeUserRepository
 
 @pytest.fixture
 def user_service():
-    repository = FakeUserRepository()
+    repository = FakeUserRepository(users=[])
 
     user_service = UserService(repository=repository)
     return user_service
