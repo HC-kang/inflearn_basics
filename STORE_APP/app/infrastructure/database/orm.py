@@ -9,7 +9,7 @@ class BaseModel(Model):
 
 
 class UserModel(BaseModel):
-    username = CharField(unique=True)
+    name = CharField(unique=True)
 
     class Meta:
         table_name = "users"
